@@ -33,6 +33,8 @@ const AIAssistant = () => {
  
 
   const OPEN_AI_URL = "https://api.openai.com/v1/chat/completions";
+  const OPEN_AI_KEY =
+    "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; // Replace with your actual OpenAI API key
 
   const handleSend = async () => {
     if (!query.trim()) return;
@@ -47,7 +49,7 @@ const AIAssistant = () => {
         method: "POST",
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${}`,
+          Authorization: `Bearer ${OPEN_AI_KEY}`,
         },
         body: JSON.stringify({
           model: "gpt-4o",

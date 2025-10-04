@@ -1,3 +1,6 @@
+import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -8,11 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import useAuthStore from "../store/auth";
-import { Ionicons } from "@expo/vector-icons";
-import axios from "axios";
 import { mpants, mshirts, pants, shoes, skirts, tops } from "../images";
+import useAuthStore from "../store/auth";
 
 const ProfileScreen = () => {
   const [activeTab, setActiveTab] = useState("Clothes");
@@ -20,7 +20,7 @@ const ProfileScreen = () => {
   const { logout, user, token } = useAuthStore();
   const [outifts, setOutfits] = useState([]);
   const [loading, setLoading] = useState(false);
-  const username = user?.username || "sujanand";
+  const username = user?.username || "nuwan";
   const email = user?.email || "";
   const followersCount = user?.followers?.length || 0;
   const followingCount = user?.following?.length || 0;
@@ -42,7 +42,8 @@ const ProfileScreen = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/save-outfit/user/${user._id}`,
+          // `http://localhost:3000/save-outfit/user/${user._id}`,
+          `http://192.168.1.100:3000/save-outfit/user/${user._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -75,7 +76,7 @@ const ProfileScreen = () => {
           }
         });
 
-  const sortItems = (items:any) => {
+  const sortItems = (items: any) => {
     const order = ["shirt", "pants", "skirts", "shoes"];
     return items.sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type));
   };

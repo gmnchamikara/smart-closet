@@ -1,3 +1,10 @@
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -9,15 +16,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
-import moment from "moment";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
+
 const features = [
   {
     title: "AI Suggestions",
@@ -124,7 +125,7 @@ const HomeScreen = () => {
     const fetchToken = async () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
-        console.log("token",token)
+        console.log("token", token);
         if (token) {
           const decoded = jwtDecode(token) as { id: string };
           setUserId(decoded.id);
@@ -133,8 +134,6 @@ const HomeScreen = () => {
         console.error("Failed to fetch token", error);
       }
     };
-
-
 
     const fetchSavedOutfits = async () => {
       if (!userId) {
@@ -145,7 +144,8 @@ const HomeScreen = () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
         const response = await axios.get(
-          `http://localhost:3000/save-outfit/user/${userId}`,
+          // `http://localhost:3000/save-outfit/user/${userId}`,
+          `http://192.168.1.100:3000/save-outfit/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -165,14 +165,13 @@ const HomeScreen = () => {
       }
     };
 
-
     if (isFocused) {
       fetchToken().then(() => {
         if (userId) {
           fetchSavedOutfits();
         }
       });
-    };
+    }
 
     const unsubscribe = navigation.addListener("focus", () => {
       const state = navigation.getState();
@@ -185,12 +184,12 @@ const HomeScreen = () => {
     return unsubscribe;
   }, [isFocused, navigation, userId]);
 
-  console.log("Data res",savedOutfits);
+  console.log("Data res", savedOutfits);
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1 bg-white">
         <View className="flex-row items-center justify-between px-4 pt-4">
-          <Text className="text-3xl font-bold">Fits</Text>
+          <Text className="text-3xl font-bold">Outfits</Text>
           <View className="flex-row items-center gap-3">
             <TouchableOpacity className="bg-black px-4 py-1 rounded-full">
               <Text className="text-white font-semibold text-sm">Upgrade</Text>
@@ -247,7 +246,7 @@ const HomeScreen = () => {
                 ? savedOutfits[today]
                 : null);
 
-              // console.log("Data",outfit);
+            // console.log("Data",outfit);
 
             return (
               <View className="mr-3">
@@ -280,11 +279,15 @@ const HomeScreen = () => {
                           style={{ maxWidth: "100%", maxHeight: "50%" }}
                         />
                       )}
-                       {outfit.find((item) => item.type === "pants" || item.type == "skirts")  && (
+                      {outfit.find(
+                        (item) => item.type === "pants" || item.type == "skirts"
+                      ) && (
                         <Image
                           source={{
-                            uri: outfit.find((item) => item.type === "pants" || item.type == "skirts")
-                              ?.image,
+                            uri: outfit.find(
+                              (item) =>
+                                item.type === "pants" || item.type == "skirts"
+                            )?.image,
                           }}
                           className="w-20 h-20"
                           resizeMode="contain"
@@ -305,7 +308,7 @@ const HomeScreen = () => {
         <View className="flex-row flex-wrap justify-between px-4 mt-6">
           {features.map((feature, idx) => (
             <Pressable
-            onPress={() => navigation.navigate(feature.screen)}
+              onPress={() => navigation.navigate(feature.screen)}
               style={{
                 backgroundColor: ["#FFF1F2", "#EFF6FF", "#F0FFF4", "#FFFBEB"][
                   idx % 4

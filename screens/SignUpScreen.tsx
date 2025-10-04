@@ -28,6 +28,14 @@ const SignUpScreen = () => {
       await register(email,password,username,gender,profileImage)
     }catch(error){
       Alert.alert("Error",error.message)
+      console.log(
+        "--------------",
+        email,
+        password,
+        username,
+        gender,
+        profileImage
+      );
     }
   }
 

@@ -1,8 +1,9 @@
-import { create } from "zustand";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { create } from "zustand";
 
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://192.168.1.100:3000";
 
 const useAuthStore = create((set) => ({
   user: null,
@@ -16,7 +17,7 @@ const useAuthStore = create((set) => ({
       const token = await AsyncStorage.getItem("userToken");
       if (token) {
         set({ token, isAuthenticated: true });
-        await useAuthStore.getState().fetchUser()
+        await useAuthStore.getState().fetchUser();
       }
     } catch (err) {
       console.error("Auth initialization failed", err);
@@ -33,17 +34,17 @@ const useAuthStore = create((set) => ({
         gender,
         profileImage,
       });
-      console.log("data",response.data)
+      console.log("data", response.data);
       const { token } = response.data;
       await AsyncStorage.setItem("userToken", token);
       set({ token, loading: false, isAuthenticated: true });
-      await useAuthStore.getState().fetchUser()
+      await useAuthStore.getState().fetchUser();
     } catch (error) {
       set({ error: error.response.data.error });
     }
   },
 
-  login: async (email,password) => {
+  login: async (email, password) => {
     set({ loading: true, error: null });
     try {
       const response = await axios.post(`${BASE_URL}/login`, {
@@ -51,10 +52,10 @@ const useAuthStore = create((set) => ({
         password,
       });
       const { token } = response.data;
-      console.log("token",response.data)
+      console.log("token", response.data);
       await AsyncStorage.setItem("userToken", token);
       set({ token, loading: false, isAuthenticated: true });
-      await useAuthStore.getState().fetchUser()
+      await useAuthStore.getState().fetchUser();
     } catch (err) {
       set({ error: err.response.data.error });
     }

@@ -1,3 +1,7 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import React, { useState } from "react";
 import {
   Image,
   SafeAreaView,
@@ -8,10 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import Modal from "react-native-modal";
 
 const AIOutfitmaker = () => {
@@ -45,14 +45,19 @@ const AIOutfitmaker = () => {
         searchQuery = `${occasion} ${searchQuery}`.trim();
       }
 
-      console.log("Data",searchQuery);
+      console.log("Data", searchQuery);
+
+      // const response = await axios.get(
+      //   `http://localhost:3000/smart-search?query=${encodeURIComponent(
+      //     searchQuery
+      //   )}`
+      // );
 
       const response = await axios.get(
-        `http://localhost:3000/smart-search?query=${encodeURIComponent(
+        `http://192.168.1.100:3000/smart-search?query=${encodeURIComponent(
           searchQuery
         )}`
       );
-      
 
       setOutfits(response.data);
     } catch (error) {

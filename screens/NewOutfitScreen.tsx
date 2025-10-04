@@ -1,3 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -10,11 +15,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
 
 interface ClothingItem {
   id: number;
@@ -39,7 +39,8 @@ const NewOutfitScreen = () => {
   const [visiblilty, setVisiblity] = useState("Everyone");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(null);
-  const BASE_URL = "http://localhost:3000";
+  // const BASE_URL = "http://localhost:3000";
+  const BASE_URL = "http://192.168.1.100:3000";
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -180,11 +181,17 @@ const NewOutfitScreen = () => {
           </View>
         </View>
       </View>
-      <TouchableOpacity className="bg-black py-3 mx-4 mb-4 rounded" onPress={handleSave} disabled={loading}>
+      <TouchableOpacity
+        className="bg-black py-3 mx-4 mb-4 rounded"
+        onPress={handleSave}
+        disabled={loading}
+      >
         {loading ? (
           <ActivityIndicator color="#ffffff" />
         ) : (
-          <Text className="text-white text-center font-semibold">Save outfit</Text>
+          <Text className="text-white text-center font-semibold">
+            Save outfit
+          </Text>
         )}
       </TouchableOpacity>
     </SafeAreaView>
